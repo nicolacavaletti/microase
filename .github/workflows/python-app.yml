@@ -46,3 +46,27 @@ jobs:
 
     - name: Run calc unit tests
       run: newman run calc_ut.json
+
+    - name: Stop calc container
+      run: docker stop $(docker ps -q)
+
+      # Unit test: string service
+    - name: Build string microservice
+      run: docker build -t string ./string
+
+    - name: Run string service
+      run: docker run -d -p 5001:5000 string
+
+    - name: Run string unit tests
+      run: newman run string_ut.json
+
+    - name: Stop string container
+      run: docker stop $(docker ps -q)
+
+      # Build architecture
+    - name: Build microservices architecture
+      run: docker-compose up -d
+
+      # Integration tests
+    - name: Run integration tests
+      run: newman run integration.json
